@@ -8,7 +8,8 @@
 - Day 1 ~ 31 corresponds to 0 ~ 0.93
 - Day of week 1 ~ 7 corresponds to 0 ~ 0.7
 - Moon phase one full circle corresponds to 0 ~ 1.0
- ### Times (these are compatible with https://github.com/Yui0471/VRChat_OSC_Clock_System)
+ ### Times 
+ (these are compatible with https://github.com/Yui0471/VRChat_OSC_Clock_System)
 - Hour 0 ~ 12 corresponds to 0 - 0.6
 - Minute 0 ~ 60 corresponds to 0 ~ 0.6
 - Seconds 0 ~ 60 corresponds to 0 ~ 0.6
