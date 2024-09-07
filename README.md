@@ -13,7 +13,7 @@
 - Minute 0 ~ 60 corresponds to 0 ~ 0.6
 - Seconds 0 ~ 60 corresponds to 0 ~ 0.6
 
--   Notes:unlike the VRChat OSC Clock System, time hands will move continuously like real mechanical watches.
+-   Note : unlike the VRChat OSC Clock System, time hands will move continuously like real mechanical watches.
    
 ### additional functions
 - GMT (24 Hour hands) 0 ~ 24 corresponds to 0 ~ 0.6
