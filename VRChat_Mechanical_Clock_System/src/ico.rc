@@ -1,0 +1,3 @@
+//ico.rc
+
+TEST ICON DISCARDABLE "icon.ico"

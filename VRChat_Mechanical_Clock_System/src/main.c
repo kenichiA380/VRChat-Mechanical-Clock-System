@@ -72,7 +72,7 @@ int WinMain()
     settings = loadsettings(SAVEFILE); //load settings file to struct settings
     applySettings();                          //applying settings
 
-    const char* WindowBox000Text = "VRChat Mechanical Clock OSC Client V0.1";//seriously can anyone come up with a better name please?
+    const char* WindowBox000Text = "VRChat Mechanical Clock OSC Client V0.0.2";//seriously can anyone come up with a better name please?
     const char* Label007Text = "Hz";
     const char* Label010Text = "Parameter Settings";
     const char* Label011Text = "/avatar/parameters/";
