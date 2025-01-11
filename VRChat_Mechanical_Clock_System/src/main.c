@@ -17,6 +17,7 @@ static void applySettings();
 int errorcode;
 bool err = 0;
 bool saved = 0;
+bool zeroMsecAlign = false;
 struct settings_t settings;
 struct settings_t settingsbuf;
 
@@ -72,7 +73,7 @@ int WinMain()
     settings = loadsettings(SAVEFILE); //load settings file to struct settings
     applySettings();                          //applying settings
 
-    const char* WindowBox000Text = "VRChat Mechanical Clock OSC Client V0.0.2";//seriously can anyone come up with a better name please?
+    const char* WindowBox000Text = "VRChat Mechanical Clock OSC Client V0.0.3";//seriously can anyone come up with a better name please?
     const char* Label007Text = "Hz";
     const char* Label010Text = "Parameter Settings";
     const char* Label011Text = "/avatar/parameters/";
@@ -191,23 +192,28 @@ int WinMain()
         //----------------------------------------------------------------------------------
 
         //refresh and send osc packets when reached each beat
-        oldTime = clock();
+
         if (beatrate <= 0 || beatrate > 16) return 1;
 
         //StartButton ON
         if (StartBtnActive && !err) 
-        {
-            //GuiLock();
+        {       
+            oldTime = clock();
             strcpy(StartBtnText, "Stop");
 
-            if (oldTime >= newTime + 1000 / beatrate) //check beat
+            time_t time_; //for moon phase
+            time(&time_);
+           
+            while (!zeroMsecAlign)
+            {
+               timedata = getTimes();
+               if (timedata.wMilliseconds == 0) zeroMsecAlign = true;
+            }
+           
+            if (oldTime >= newTime + 1000 / beatrate && zeroMsecAlign) //check beat
             {
 
-                time_t time_;
-                time(&time_);
-                
-
-                timedata = getTimes();//get times
+                //timedata = getTimes();//get times
 
                 //hand position float calculations
                 // ---------------------------------------------------------------------------------------------------------------
@@ -234,10 +240,10 @@ int WinMain()
                 //----------------------------------------------------------------------------------------------------------------
 
                 //show current time as status
-                sprintf_s(StatusLabelText, sizeof(StatusLabelText), "Sending: %d/%d/%d %s %d:%d:%d.%d phase:%.2f\
+                sprintf_s(StatusLabelText, sizeof(StatusLabelText), "Sending: %d/%02d/%02d %s %02d:%02d:%02d.%03d Moon:%.2f\
 ",timedata.wYear, timedata.wMonth, timedata.wDay, convertDow(timedata.wDayOfWeek), timedata.wHour, timedata.wMinute, timedata.wSecond, timedata.wMilliseconds, moon_hand);
 
-                //pass parameter settings to OSC
+                //pass parameter name to OSC
                 sprintf_s(settingsbuf.yearParam, sizeof(settingsbuf.yearParam),   "/avatar/parameters/%s", settings.yearParam);
                 sprintf_s(settingsbuf.monthParam, sizeof(settingsbuf.monthParam), "/avatar/parameters/%s", settings.monthParam);
                 sprintf_s(settingsbuf.dayParam, sizeof(settingsbuf.dayParam),     "/avatar/parameters/%s", settings.dayParam);
@@ -248,7 +254,7 @@ int WinMain()
                 sprintf_s(settingsbuf.secParam, sizeof(settingsbuf.secParam),     "/avatar/parameters/%s", settings.secParam);
                 sprintf_s(settingsbuf.msecParam, sizeof(settingsbuf.msecParam),   "/avatar/parameters/%s", settings.msecParam);
 
-                printf("is this working?\n");
+                //check if each parameter is enabled and send OSC message
                 if (settings.yearParamEnabled) printf("%d\n", sendOSCMessageFloat(settingsbuf.yearParam, year_hand));
                 if (settings.monthParamEnabled) printf("%d\n", sendOSCMessageFloat(settingsbuf.monthParam, month_hand));
                 if (settings.dayParamEnabled) printf("%d\n", sendOSCMessageFloat(settingsbuf.dayParam, day_hand));
@@ -275,6 +281,7 @@ int WinMain()
             //GuiUnlock();
             strcpy(StartBtnText,"Start");
             strcpy(StatusLabelText, "Status: Stopped");
+            zeroMsecAlign = false; //reset 0 millisec alignment
         }
 
 
