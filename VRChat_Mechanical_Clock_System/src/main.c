@@ -213,7 +213,7 @@ int WinMain()
             if (oldTime >= newTime + 1000 / beatrate && zeroMsecAlign) //check beat
             {
 
-                //timedata = getTimes();//get times
+                timedata = getTimes();//get times
 
                 //hand position float calculations
                 // ---------------------------------------------------------------------------------------------------------------
